@@ -1,0 +1,6 @@
+# CONTRACTX managed — do not edit manually
+# These patterns identify files managed by the CONTRACTX framework
+CONTRACTX/gaps/open/*
+CONTRACTX/audits/*
+__pycache__/
+*.pyc

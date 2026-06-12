@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CONTRACTX — self-growing contracts that make your AI agent think twice. A hierarchy of CONTRACTX.md files + a skill that audits them. Scare your agent into precision.">
+  <meta name="color-scheme" content="light dark">
+  <title>CONTRACTX — AI Agent Contracts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0a0e1a;
+      --surface: rgba(15, 22, 40, 0.85);
+      --surface-solid: #0f1628;
+      --text: #e8ecf4;
+      --text-mid: #9aa3b8;
+      --text-dim: #5a6478;
+      --border: #1e2a42;
+      --grid-line: rgba(56, 120, 240, 0.06);
+      --grid-line-strong: rgba(56, 120, 240, 0.12);
+
+      --neon-blue: #5b9ef5;
+      --neon-purple: #a78bfa;
+      --neon-green: #34d399;
+      --neon-amber: #f5b942;
+      --neon-pink: #f472b6;
+      --neon-cyan: #22d3ee;
+
+      --neon-blue-soft: rgba(91, 158, 245, 0.1);
+      --neon-purple-soft: rgba(167, 139, 250, 0.1);
+      --neon-green-soft: rgba(52, 211, 153, 0.1);
+      --neon-amber-soft: rgba(245, 185, 66, 0.1);
+      --neon-pink-soft: rgba(244, 114, 182, 0.1);
+      --neon-cyan-soft: rgba(34, 211, 238, 0.1);
+
+      --radius: 14px;
+      --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      --mono: "JetBrains Mono", "SF Mono", "Cascadia Code", Consolas, monospace;
+    }
+
+    /* Light mode — Claude Desktop warm white */
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f5f0e8;
+        --surface: rgba(255, 255, 255, 0.85);
+        --surface-solid: #ffffff;
+        --text: #1a1a1a;
+        --text-mid: #5c5c5c;
+        --text-dim: #8c8c8c;
+        --border: #e0d8cc;
+        --grid-line: rgba(180, 160, 130, 0.08);
+        --grid-line-strong: rgba(180, 160, 130, 0.15);
+
+        --neon-blue: #2563eb;
+        --neon-purple: #7c3aed;
+        --neon-green: #059669;
+        --neon-amber: #d97706;
+        --neon-pink: #db2777;
+        --neon-cyan: #0891b2;
+
+        --neon-blue-soft: rgba(37, 99, 235, 0.08);
+        --neon-purple-soft: rgba(124, 58, 237, 0.08);
+        --neon-green-soft: rgba(5, 150, 105, 0.08);
+        --neon-amber-soft: rgba(217, 119, 6, 0.08);
+        --neon-pink-soft: rgba(219, 39, 119, 0.08);
+        --neon-cyan-soft: rgba(8, 145, 178, 0.08);
+      }
+    }
+
+    /* ---- Top nav ---- */
+    .topnav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.8rem 1rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .topnav a, .topnav button {
+      font-family: var(--mono);
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-mid);
+      text-decoration: none;
+      background: none;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 0.45rem 1rem;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .topnav a:hover, .topnav button:hover {
+      color: var(--text);
+      border-color: var(--border);
+    }
+
+    .topnav .sep {
+      color: var(--border);
+      font-size: 0.8rem;
+      user-select: none;
+    }
+
+    /* Manual overrides */
+    [data-theme="light"] {
+      --bg: #f5f0e8;
+      --surface: rgba(255, 255, 255, 0.85);
+      --surface-solid: #ffffff;
+      --text: #1a1a1a;
+      --text-mid: #5c5c5c;
+      --text-dim: #8c8c8c;
+      --border: #e0d8cc;
+      --grid-line: rgba(180, 160, 130, 0.08);
+      --grid-line-strong: rgba(180, 160, 130, 0.15);
+
+      --neon-blue: #2563eb;
+      --neon-purple: #7c3aed;
+      --neon-green: #059669;
+      --neon-amber: #d97706;
+      --neon-pink: #db2777;
+      --neon-cyan: #0891b2;
+
+      --neon-blue-soft: rgba(37, 99, 235, 0.08);
+      --neon-purple-soft: rgba(124, 58, 237, 0.08);
+      --neon-green-soft: rgba(5, 150, 105, 0.08);
+      --neon-amber-soft: rgba(217, 119, 6, 0.08);
+      --neon-pink-soft: rgba(219, 39, 119, 0.08);
+      --neon-cyan-soft: rgba(8, 145, 178, 0.08);
+    }
+
+    [data-theme="dark"] {
+      --bg: #0a0e1a;
+      --surface: rgba(15, 22, 40, 0.85);
+      --surface-solid: #0f1628;
+      --text: #e8ecf4;
+      --text-mid: #9aa3b8;
+      --text-dim: #5a6478;
+      --border: #1e2a42;
+      --grid-line: rgba(56, 120, 240, 0.06);
+      --grid-line-strong: rgba(56, 120, 240, 0.12);
+
+      --neon-blue: #5b9ef5;
+      --neon-purple: #a78bfa;
+      --neon-green: #34d399;
+      --neon-amber: #f5b942;
+      --neon-pink: #f472b6;
+      --neon-cyan: #22d3ee;
+
+      --neon-blue-soft: rgba(91, 158, 245, 0.1);
+      --neon-purple-soft: rgba(167, 139, 250, 0.1);
+      --neon-green-soft: rgba(52, 211, 153, 0.1);
+      --neon-amber-soft: rgba(245, 185, 66, 0.1);
+      --neon-pink-soft: rgba(244, 114, 182, 0.1);
+      --neon-cyan-soft: rgba(34, 211, 238, 0.1);
+    }
+
+    @media (prefers-color-scheme: light) {
+      .loop-rule {
+        background: rgba(5, 150, 105, 0.06);
+        border-color: rgba(5, 150, 105, 0.18);
+      }
+    }
+    [data-theme="light"] .loop-rule {
+      background: rgba(5, 150, 105, 0.06);
+      border-color: rgba(5, 150, 105, 0.18);
+    }
+
+    html { scroll-padding-top: 3.5rem; scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+
+      /* Blueprint grid */
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(var(--grid-line-strong) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line-strong) 1px, transparent 1px);
+      background-size:
+        20px 20px,
+        20px 20px,
+        100px 100px,
+        100px 100px;
+      background-position: center center;
+    }
+
+    .wrap {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ---- Hero ---- */
+    .hero {
+      padding: clamp(5rem, 12vh, 8rem) 0 2rem;
+      text-align: center;
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    .hero h1 {
+      font-family: var(--sans);
+      font-size: clamp(3rem, 7vw, 5rem);
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      line-height: 1;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 .los {
+      color: var(--neon-purple);
+      text-shadow: 0 0 40px rgba(167, 139, 250, 0.3);
+    }
+
+    .hero-sub {
+      font-size: clamp(1.1rem, 2.2vw, 1.3rem);
+      color: var(--text-mid);
+      max-width: 520px;
+      margin: 0 auto 1.8rem;
+      font-weight: 400;
+      line-height: 1.6;
+    }
+
+    .terminal {
+      display: inline-block;
+      background: var(--surface-solid);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.4rem 2rem;
+      font-family: var(--mono);
+      font-size: 0.95rem;
+      text-align: left;
+      line-height: 2.2;
+      backdrop-filter: blur(12px);
+    }
+
+    .terminal .prompt { color: var(--neon-green); font-weight: 600; }
+    .terminal .cmd { color: var(--text); }
+    .terminal .arg { color: var(--neon-cyan); }
+    .terminal .cmt { color: var(--text-dim); }
+
+    /* ---- Section ---- */
+    section { padding: 2.5rem 0; }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    section h2 {
+      font-family: var(--sans);
+      font-size: clamp(1.6rem, 3vw, 2rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+    }
+
+    section > .desc {
+      color: var(--text-mid);
+      font-size: 1.05rem;
+      margin-bottom: 2.5rem;
+      line-height: 1.6;
+    }
+
+    /* ---- Skill Cards ---- */
+    .skills {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .skill-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.6rem;
+      border-top: 3px solid transparent;
+      transition: transform 0.15s, box-shadow 0.15s;
+      animation: fadeUp 0.5s ease-out both;
+      backdrop-filter: blur(12px);
+    }
+
+    .skill-card:hover { transform: translateY(-3px); }
+
+    .skill-card:nth-child(1) { border-top-color: var(--neon-blue); animation-delay: 0s; }
+    .skill-card:nth-child(2) { border-top-color: var(--neon-green); animation-delay: 0.06s; }
+    .skill-card:nth-child(3) { border-top-color: var(--neon-amber); animation-delay: 0.12s; }
+    .skill-card:nth-child(4) { border-top-color: var(--neon-pink); animation-delay: 0.18s; }
+    .skill-card:nth-child(5) { border-top-color: var(--neon-cyan); animation-delay: 0.24s; }
+
+    .skill-card:nth-child(1):hover { box-shadow: 0 8px 32px rgba(91, 158, 245, 0.15); }
+    .skill-card:nth-child(2):hover { box-shadow: 0 8px 32px rgba(52, 211, 153, 0.15); }
+    .skill-card:nth-child(3):hover { box-shadow: 0 8px 32px rgba(245, 185, 66, 0.15); }
+    .skill-card:nth-child(4):hover { box-shadow: 0 8px 32px rgba(244, 114, 182, 0.15); }
+    .skill-card:nth-child(5):hover { box-shadow: 0 8px 32px rgba(34, 211, 238, 0.15); }
+
+    .skill-card:nth-child(1) .skill-name { color: var(--neon-blue); }
+    .skill-card:nth-child(2) .skill-name { color: var(--neon-green); }
+    .skill-card:nth-child(3) .skill-name { color: var(--neon-amber); }
+    .skill-card:nth-child(4) .skill-name { color: var(--neon-pink); }
+    .skill-card:nth-child(5) .skill-name { color: var(--neon-cyan); }
+
+    .skill-name {
+      font-family: var(--mono);
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+    }
+
+    .skill-card .what {
+      font-size: 0.95rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+
+    .skill-card .try {
+      margin-top: 0.9rem;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    /* ---- Tree ---- */
+    .tree {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem 2.5rem;
+      font-family: var(--mono);
+      font-size: 0.92rem;
+      line-height: 2.3;
+      overflow-x: auto;
+      backdrop-filter: blur(12px);
+    }
+
+    .tree .f { font-weight: 700; }
+    .tree .c { color: var(--text-dim); font-weight: 400; }
+    .tree .b  { color: var(--neon-blue); }
+    .tree .g  { color: var(--neon-green); }
+    .tree .a  { color: var(--neon-amber); }
+    .tree .p  { color: var(--neon-pink); }
+    .tree .cy { color: var(--neon-cyan); }
+    .tree .pr { color: var(--neon-purple); }
+
+    /* ---- Steps ---- */
+    .steps { display: grid; gap: 2rem; }
+
+    .step {
+      display: grid;
+      grid-template-columns: 3.2rem 1fr;
+      gap: 1.2rem;
+      align-items: start;
+      animation: fadeUp 0.4s ease-out both;
+    }
+
+    .step:nth-child(1) .num { background: var(--neon-green-soft); color: var(--neon-green); border: 1px solid rgba(52, 211, 153, 0.2); }
+    .step:nth-child(2) .num { background: var(--neon-blue-soft); color: var(--neon-blue); border: 1px solid rgba(91, 158, 245, 0.2); }
+    .step:nth-child(3) .num { background: var(--neon-purple-soft); color: var(--neon-purple); border: 1px solid rgba(167, 139, 250, 0.2); }
+
+    .step:nth-child(2) { animation-delay: 0.08s; }
+    .step:nth-child(3) { animation-delay: 0.16s; }
+
+    .num {
+      width: 3.2rem;
+      height: 3.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--mono);
+      font-weight: 700;
+      font-size: 1.1rem;
+      border-radius: 10px;
+    }
+
+    .step h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .step p {
+      font-size: 1rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+
+    .step code {
+      background: var(--surface-solid);
+      border: 1px solid var(--border);
+      padding: 0.15rem 0.45rem;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-family: var(--mono);
+      font-weight: 500;
+    }
+
+    /* ---- The Point ---- */
+    .point {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      backdrop-filter: blur(12px);
+      margin-bottom: 2.5rem;
+    }
+
+    .point h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+    }
+
+    .point p {
+      font-size: 1.05rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+
+    .point p + p { margin-top: 0.8rem; }
+
+    .point .highlight {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* ---- Flow diagram ---- */
+    .flow {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      gap: 0;
+      align-items: center;
+      margin: 2.5rem 0;
+    }
+
+    .flow-node {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.4rem;
+      text-align: center;
+      backdrop-filter: blur(12px);
+    }
+
+    .flow-node h4 {
+      font-family: var(--mono);
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+
+    .flow-node p {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+
+    .flow-arrow {
+      font-size: 1.4rem;
+      color: var(--text-dim);
+      text-align: center;
+      padding: 0 0.4rem;
+    }
+
+    .flow-node:nth-child(1) { border-top: 3px solid var(--neon-cyan); }
+    .flow-node:nth-child(1) h4 { color: var(--neon-cyan); }
+    .flow-node:nth-child(3) { border-top: 3px solid var(--neon-purple); }
+    .flow-node:nth-child(3) h4 { color: var(--neon-purple); }
+    .flow-node:nth-child(5) { border-top: 3px solid var(--neon-green); }
+    .flow-node:nth-child(5) h4 { color: var(--neon-green); }
+
+    @media (max-width: 640px) {
+      .flow {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+      .flow-arrow { transform: rotate(90deg); padding: 0.3rem 0; }
+    }
+
+    /* ---- Cases ---- */
+    .cases {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .case {
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      border-left: 3px solid transparent;
+      backdrop-filter: blur(8px);
+    }
+
+    .case:nth-child(1) { background: var(--neon-blue-soft); border-left-color: var(--neon-blue); }
+    .case:nth-child(2) { background: var(--neon-green-soft); border-left-color: var(--neon-green); }
+    .case:nth-child(3) { background: var(--neon-amber-soft); border-left-color: var(--neon-amber); }
+    .case:nth-child(4) { background: var(--neon-pink-soft); border-left-color: var(--neon-pink); }
+    .case:nth-child(5) { background: var(--neon-purple-soft); border-left-color: var(--neon-purple); }
+    .case:nth-child(6) { background: var(--neon-cyan-soft); border-left-color: var(--neon-cyan); }
+
+    .case h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+
+    .case p {
+      font-size: 0.92rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+
+    .case code {
+      background: var(--surface-solid);
+      border: 1px solid var(--border);
+      padding: 0.1rem 0.4rem;
+      border-radius: 5px;
+      font-size: 0.82rem;
+      font-family: var(--mono);
+      font-weight: 500;
+    }
+
+    /* ---- Spotlight ---- */
+    .spotlight {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      backdrop-filter: blur(12px);
+      border-top: 3px solid var(--neon-amber);
+    }
+
+    .spotlight h3 {
+      font-family: var(--mono);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--neon-amber);
+      margin-bottom: 0.8rem;
+    }
+
+    .spotlight p {
+      font-size: 1.02rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+
+    .spotlight p + p { margin-top: 0.8rem; }
+
+    .spotlight .highlight { color: var(--text); font-weight: 600; }
+
+    .spotlight code {
+      background: var(--surface-solid);
+      border: 1px solid var(--border);
+      padding: 0.1rem 0.4rem;
+      border-radius: 5px;
+      font-size: 0.88rem;
+      font-family: var(--mono);
+      font-weight: 500;
+    }
+
+    .phase-flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 1.2rem 0;
+      font-family: var(--mono);
+      font-size: 0.88rem;
+    }
+
+    .phase {
+      padding: 0.35rem 0.8rem;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    .phase-plan { background: var(--neon-blue-soft); color: var(--neon-blue); }
+    .phase-build { background: var(--neon-green-soft); color: var(--neon-green); }
+    .phase-verify { background: var(--neon-amber-soft); color: var(--neon-amber); }
+    .phase-fix { background: var(--neon-pink-soft); color: var(--neon-pink); }
+    .phase-learn { background: var(--neon-purple-soft); color: var(--neon-purple); }
+
+    .phase-arrow { color: var(--text-dim); font-size: 0.8rem; }
+
+    /* ---- Concepts ---- */
+    .concepts {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .concept {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem 2.5rem;
+      backdrop-filter: blur(12px);
+      border-left: 3px solid transparent;
+    }
+
+    .concept:nth-child(1) { border-left-color: var(--neon-green); }
+    .concept:nth-child(2) { border-left-color: var(--neon-blue); }
+    .concept:nth-child(3) { border-left-color: var(--neon-purple); }
+    .concept:nth-child(4) { border-left-color: var(--neon-amber); }
+    .concept:nth-child(5) { border-left-color: var(--neon-cyan); }
+    .concept:nth-child(6) { border-left-color: var(--neon-pink); }
+
+    .concept h3 {
+      font-family: var(--mono);
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+    }
+
+    .concept:nth-child(1) h3 { color: var(--neon-green); }
+    .concept:nth-child(2) h3 { color: var(--neon-blue); }
+    .concept:nth-child(3) h3 { color: var(--neon-purple); }
+    .concept:nth-child(4) h3 { color: var(--neon-amber); }
+    .concept:nth-child(5) h3 { color: var(--neon-cyan); }
+    .concept:nth-child(6) h3 { color: var(--neon-pink); }
+
+    .concept p {
+      font-size: 0.98rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+
+    .concept p + p { margin-top: 0.7rem; }
+
+    .concept .highlight { color: var(--text); font-weight: 600; }
+
+    .concept code {
+      background: var(--surface-solid);
+      border: 1px solid var(--border);
+      padding: 0.1rem 0.4rem;
+      border-radius: 5px;
+      font-size: 0.86rem;
+      font-family: var(--mono);
+      font-weight: 500;
+    }
+
+    .concept-list {
+      margin: 0.6rem 0;
+      padding-left: 1.2rem;
+      color: var(--text-mid);
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+
+    .concept-list code {
+      background: var(--surface-solid);
+      border: 1px solid var(--border);
+      padding: 0.1rem 0.4rem;
+      border-radius: 5px;
+      font-size: 0.84rem;
+      font-family: var(--mono);
+      font-weight: 500;
+    }
+
+    .loop-detail {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .loop-rule {
+      background: rgba(52, 211, 153, 0.05);
+      border: 1px solid rgba(52, 211, 153, 0.15);
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+    }
+
+    .loop-rule h4 {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--neon-green);
+      margin-bottom: 0.3rem;
+    }
+
+    .loop-rule p {
+      font-size: 0.88rem;
+      color: var(--text-mid);
+      line-height: 1.5;
+    }
+
+    /* ---- FAQ ---- */
+    .faq { display: grid; gap: 0.6rem; }
+
+    .faq details {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      backdrop-filter: blur(12px);
+      overflow: hidden;
+    }
+
+    .faq summary {
+      padding: 1.2rem 1.8rem;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      user-select: none;
+    }
+
+    .faq summary::-webkit-details-marker { display: none; }
+
+    .faq summary::before {
+      content: "+";
+      font-family: var(--mono);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--neon-purple);
+      width: 1.5rem;
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+
+    .faq details[open] summary::before {
+      content: "\2212";
+    }
+
+    .faq .faq-body {
+      padding: 0 1.8rem 1.4rem 3.8rem;
+      color: var(--text-mid);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .faq .faq-body code {
+      background: var(--surface-solid);
+      border: 1px solid var(--border);
+      padding: 0.1rem 0.4rem;
+      border-radius: 5px;
+      font-size: 0.84rem;
+      font-family: var(--mono);
+      font-weight: 500;
+    }
+
+    .faq .faq-body p + p { margin-top: 0.6rem; }
+
+    /* ---- About ---- */
+    .about-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      backdrop-filter: blur(12px);
+      border-top: 3px solid var(--neon-purple);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    @media (max-width: 640px) {
+      .about-card { grid-template-columns: 1fr; }
+    }
+
+    .about-card h3 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 0.4rem;
+    }
+
+    .about-card .role {
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      color: var(--neon-purple);
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+    }
+
+    .about-card p {
+      font-size: 1rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+
+    .about-meta {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      line-height: 2;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .about-source {
+      margin-top: 1rem;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      font-style: italic;
+    }
+
+    /* ---- Docs subsections ---- */
+    .docs-sub {
+      margin-top: 2.5rem;
+    }
+
+    .docs-sub-label {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ---- Footer ---- */
+    footer {
+      padding: 3.5rem 0;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--border);
+      margin-top: 3rem;
+    }
+
+    footer a { color: var(--neon-purple); text-decoration: none; font-weight: 500; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ---- Animations ---- */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <nav class="topnav">
+    <a href="#">Home</a>
+    <span class="sep">/</span>
+    <a href="#docs">Docs</a>
+    <span class="sep">/</span>
+    <a href="#about">About</a>
+    <span class="sep">/</span>
+    <a href="https://github.com/GadOfir/contractx-starter" target="_blank">GitHub</a>
+    <span class="sep">/</span>
+    <button onclick="toggleTheme()"><span class="theme-icon">&#9789;</span> Theme</button>
+  </nav>
+
+  <div class="wrap">
+
+    <header class="hero">
+      <h1><span class="los">CONTRACTX</span><br>Scare your agent.</h1>
+      <p class="hero-sub">We're dealing with <strong>CONTRACTX</strong>, not docs. Your AI agent reads these contracts before touching any file &mdash; and thinks twice before bullshitting you. Self-growing. Self-auditing. <strong>Lawyer in the room.</strong></p>
+      <div class="terminal">
+        <span class="prompt">$</span> <span class="cmd">git clone</span> <span class="arg">contractx-starter</span> <span class="cmt"># your agent's lawyer</span><br>
+        <span class="prompt">$</span> <span class="cmd">cd</span> <span class="arg">your-project</span> <span class="cmd">&&</span> <span class="arg">claude</span><br>
+        <span class="prompt">&gt;</span> <span class="arg">"interview me for CONTRACTX"</span> <span class="cmt"># agent maps your entire project</span>
+      </div>
+    </header>
+
+    <!-- Features -->
+    <section>
+      <div class="section-label" style="color: var(--neon-purple);">Features</div>
+      <h2>What CONTRACTX gives you</h2>
+      <p class="desc">Every directory gets its own contract. The agent reads the chain before touching anything. No more "why did it touch that file?"</p>
+      <div class="skills">
+        <div class="skill-card">
+          <div class="skill-name">Self-growing hierarchy</div>
+          <p class="what">Drop a root CONTRACTX.md. As your project changes, the agent creates child CONTRACTX.md files in every directory that becomes a durable boundary. The tree grows with your code.</p>
+          <div class="try">Root &rarr; lib/ &rarr; handlers/ &rarr; skill/</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-name">Walk-before-edit protocol</div>
+          <p class="what">Before touching any file, the agent walks from root to target, reading every CONTRACTX.md along the path. Local rules stack on global rules. No guessing.</p>
+          <div class="try">lib/dispatch.py &rarr; reads root, lib/, handlers/ contracts</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-name">Post-edit update pass</div>
+          <p class="what">After every meaningful change, the agent updates the nearest CONTRACTX.md. New invariants? Updated scope? New child boundary? The contracts stay current automatically.</p>
+          <div class="try">Added handler &rarr; updates handlers/CONTRACTX.md</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-name">Gap tracking built-in</div>
+          <p class="what">Found a contradiction? Stale index? Missing child? File a CX-NNN gap in CONTRACTX/gaps/. Resolved gaps stay as audit trail. Never lose a finding.</p>
+          <div class="try">CX-001 &rarr; CX-042: every gap tracked</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-name">Audit skill included</div>
+          <p class="what">Run <code>/contractx audit</code> and the agent walks every CONTRACTX.md in your project. Checks for drift, stale indexes, weakened rules, missing children. Exhaustive.</p>
+          <div class="try">"audit CONTRACTX chain" &middot; "check for drift"</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How -->
+    <section>
+      <div class="section-label" style="color: var(--neon-green);">Start</div>
+      <h2>Two steps</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="num">1</div>
+          <div>
+            <h3>Clone the starter</h3>
+            <p><code>git clone contractx-starter your-project</code> &mdash; drops the root CONTRACTX.md, the CONTRACTX/ folder structure, and the contractx skill into your repo. Zero dependencies. Just markdown files.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="num">2</div>
+          <div>
+            <h3>Tell your agent: <code>"Initialize CONTRACTX tree"</code></h3>
+            <p>The agent interviews you about your project &mdash; structure, conventions, invariants, boundaries. Then it builds the entire CONTRACTX hierarchy. Child files in every durable directory. Indexes populated. Ready to enforce.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Structure -->
+    <section>
+      <div class="section-label" style="color: var(--neon-blue);">Structure</div>
+      <h2>What's in the folder</h2>
+      <div class="tree">
+        <span class="pr">CONTRACTX.md</span>              <span class="c">&larr; framework rail: rules + top-level index</span><br>
+        <span class="b">CONTRACTX/</span>                 <span class="c">&larr; root artifacts folder</span><br>
+        &nbsp;&nbsp;<span class="pr">_index.md</span>            <span class="c">&larr; artifact registry</span><br>
+        &nbsp;&nbsp;<span class="b">gaps/</span>                  <span class="c">&larr; open + resolved CX-NNN gap files</span><br>
+        &nbsp;&nbsp;<span class="b">audits/</span>                <span class="c">&larr; periodic chain audit reports</span><br>
+        &nbsp;&nbsp;<span class="b">cross-cutting/</span>         <span class="c">&larr; contracts spanning 2+ directories</span><br>
+        &nbsp;&nbsp;<span class="b">refs/</span>                  <span class="c">&larr; gap format, audit checklist, thresholds</span><br>
+        <span class="b">lib/</span>                        <span class="c">&larr; example child</span><br>
+        &nbsp;&nbsp;<span class="pr">CONTRACTX.md</span>          <span class="c">&larr; lib-level contract</span><br>
+        &nbsp;&nbsp;<span class="b">CONTRACTX/</span>             <span class="c">&larr; sub-contracts (dispatch, auth, policy...)</span><br>
+        &nbsp;&nbsp;<span class="b">handlers/</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="pr">CONTRACTX.md</span>      <span class="c">&larr; handler-level contract</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="b">CONTRACTX/</span>         <span class="c">&larr; sub-contracts (core, service, policy...)</span><br>
+        &nbsp;&nbsp;<span class="b">operators/</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="pr">CONTRACTX.md</span>      <span class="c">&larr; single file (only 2 files, 1 concern)</span><br>
+        <span class="b">.claude/skills/</span><br>
+        &nbsp;&nbsp;<span class="b">contractx/</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="pr">SKILL.md</span>            <span class="c">&larr; init, walk, update, audit, gap, grow</span>
+      </div>
+    </section>
+
+    <!-- The Point -->
+    <section>
+      <div class="section-label" style="color: var(--neon-amber);">Why</div>
+      <h2>A repo that contracts you</h2>
+      <div class="point">
+        <h3>The problem</h3>
+        <p>AI agents edit code from memory. They guess conventions. They touch files they shouldn't. They forget rules from last session. Every session starts from zero.</p>
+      </div>
+      <div class="point">
+        <h3>The fix</h3>
+        <p><span class="highlight">CONTRACTX.md files are binding.</span> The agent reads them before every edit. They're not "docs to read someday" &mdash; they're <span class="highlight">instructions the agent MUST follow.</span> The hierarchy means local rules stack on global rules. The post-edit pass means contracts stay current automatically.</p>
+      </div>
+      <div class="point">
+        <h3>The psychological edge</h3>
+        <p>We call them <span class="highlight">contracts</span>, not docs. The word matters. An AI that thinks it's reading a legal contract is measurably more careful than one reading "documentation." <span class="highlight">Scare your agent. Make it think there's a lawyer in the room.</span></p>
+      </div>
+    </section>
+
+    <!-- Interview Prompt spotlight -->
+    <section>
+      <div class="section-label" style="color: var(--neon-pink);">The Key</div>
+      <h2>The interview prompt is everything</h2>
+      <div class="spotlight">
+        <h3>/contractx init</h3>
+        <p>This is the special sauce. Paste this prompt to your agent <span class="highlight">once</span> and it will deeply interview you about your project. Not shallow questions &mdash; architectural depth. Every convention, every invariant, every boundary, every unwritten rule you've internalized but never documented.</p>
+        <p>The result: <span class="highlight">a complete CONTRACTX tree built from your answers.</span> The agent maps your project structure, identifies durable boundaries, extracts invariants from your existing code, and writes every CONTRACTX.md file. 20 minutes of interview replaces weeks of manual documentation.</p>
+        <p>After init, the tree <span class="highlight">maintains itself</span>. Every edit triggers a CONTRACTX pass. New directories get contracts. Changed rules update the nearest file. The interview is a one-time investment that pays back forever.</p>
+      </div>
+    </section>
+
+    <!-- Use cases -->
+    <section>
+      <div class="section-label" style="color: var(--neon-cyan);">Use cases</div>
+      <h2>Real situations</h2>
+      <div class="cases">
+        <div class="case">
+          <h3>Starting a new project</h3>
+          <p>Clone contractx-starter, run <code>/contractx init</code>, answer the interview. Your agent builds the entire contract tree before you write a single line of code. Conventions locked in from day one.</p>
+        </div>
+        <div class="case">
+          <h3>Onboarding a developer</h3>
+          <p>They clone the repo, open Claude, and the agent reads the CONTRACTX chain. Every convention, every invariant, every boundary is enforced. No "where should I put this file?" questions.</p>
+        </div>
+        <div class="case">
+          <h3>Audit time</h3>
+          <p>Run <code>/contractx audit</code>. The agent walks every CONTRACTX.md, checks for drift from actual code, stale indexes, missing children, weakened rules. Produces a gap report. Every finding gets a CX-NNN.</p>
+        </div>
+        <div class="case">
+          <h3>Large refactor</h3>
+          <p>The CONTRACTX chain tells the agent exactly what each directory owns, what it depends on, and what invariants must be preserved. Refactors stay surgical because the agent knows the boundaries.</p>
+        </div>
+        <div class="case">
+          <h3>Multi-agent handoff</h3>
+          <p>Agent A edits lib/dispatch.py, updates lib/CONTRACTX.md. Agent B picks up the task &mdash; reads the CONTRACTX chain, sees Agent A's changes. No context lost. No repeated explanations.</p>
+        </div>
+        <div class="case">
+          <h3>Growing with the project</h3>
+          <p>New service added? Agent creates lib/services/CONTRACTX.md. New handler group? lib/handlers/CONTRACTX.md grows. The tree mirrors the codebase. Always current because the agent maintains it.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Docs -->
+    <section id="docs">
+      <div class="section-label" style="color: var(--neon-green);">Docs</div>
+      <h2>How it actually works</h2>
+      <p class="desc">The technical spec. CONTRACTX is a framework, a folder structure, a skill, and a protocol &mdash; all working together.</p>
+
+      <div class="docs-sub">
+        <div class="docs-sub-label">Concepts</div>
+      </div>
+      <div class="concepts">
+
+        <div class="concept">
+          <h3>The hierarchy — single file vs. CONTRACTX/ folder</h3>
+          <p>Every directory that becomes a <span class="highlight">durable boundary</span> gets a CONTRACTX.md. Small directories (≤5 files, ≤2 concerns) get a <span class="highlight">single CONTRACTX.md</span>. Large directories (10+ files, 3+ concerns) get a <span class="highlight">CONTRACTX/ folder</span> with sub-contracts for each concern.</p>
+          <ul class="concept-list">
+            <li><code>operators/</code> (2 files, 1 concern) &rarr; single CONTRACTX.md</li>
+            <li><code>services/</code> (16 files, 2 concerns) &rarr; CONTRACTX/ folder with registry.md + kb-subsystem.md</li>
+            <li><code>lib/</code> (134 files, 6 concerns) &rarr; CONTRACTX/ folder with dispatch.md, auth.md, policy-cascade.md, vault-secrets.md, tracing.md, config.md</li>
+          </ul>
+          <p>The entry-point CONTRACTX.md always exists and references the CONTRACTX/ folder when one exists. <span class="highlight">The walk protocol never changes</span> &mdash; the agent just reads more targeted files instead of one giant one.</p>
+        </div>
+
+        <div class="concept">
+          <h3>Walk-before-edit protocol</h3>
+          <p>The agent MUST walk the CONTRACTX chain before touching any file. Starting from root, read every CONTRACTX.md along the path to the target. <span class="highlight">No memory reliance.</span> Re-read in every session.</p>
+          <div class="loop-detail">
+            <div class="loop-rule">
+              <h4>Root first</h4>
+              <p>Root CONTRACTX.md = project-wide rules + top-level child index. Always step 1.</p>
+            </div>
+            <div class="loop-rule">
+              <h4>Parent to child</h4>
+              <p>lib/CONTRACTX.md &rarr; lib/handlers/CONTRACTX.md &rarr; lib/handlers/skill/CONTRACTX.md. Each adds precision.</p>
+            </div>
+            <div class="loop-rule">
+              <h4>Proximity wins</h4>
+              <p>Closer doc controls local details. No child weakens parent. Conflicts resolve to the closer doc.</p>
+            </div>
+            <div class="loop-rule">
+              <h4>Folder-aware</h4>
+              <p>If CONTRACTX.md references a CONTRACTX/ folder, read _index.md + relevant sub-contracts.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="concept">
+          <h3>Post-edit update pass</h3>
+          <p>After every meaningful change, the agent runs a CONTRACTX pass: update the nearest owning CONTRACTX.md, refresh child indexes, remove stale text. <span class="highlight">Small edits may skip content changes, but the pass still happens.</span></p>
+          <p>What triggers an update: purpose/scope/ownership changes, new invariants, workflow changes, new inputs/outputs/permissions, CONTRACTX.md creation/deletion/move/rename. <span class="highlight">Do NOT update for trivial changes</span> &mdash; the pass confirms "no update needed" without writing.</p>
+        </div>
+
+        <div class="concept">
+          <h3>Gap tracking (CX-NNN)</h3>
+          <p>CONTRACTX-level gaps use the CX-NNN format in <code>CONTRACTX/gaps/</code>. Same lifecycle as domain-level G-NNN: OPEN &rarr; SHIPPED &rarr; RESOLVED. Each gap entry records the contradiction, the affected CONTRACTX.md files, the fix commit, and resolution date.</p>
+          <p><span class="highlight">Gaps never get deleted</span> &mdash; moved from open/ to resolved/. The audit trail is permanent. If a CONTRACTX gap reveals a domain-level contradiction, it escalates to <code>docs/MASTER_CONTRACT.md</code> as a G-NNN.</p>
+        </div>
+
+        <div class="concept">
+          <h3>The contractx skill</h3>
+          <p>A <code>SKILL.md</code> file in <code>.claude/skills/contractx/</code> that gives the agent 8 workflows: <span class="highlight">init</span> (interview + build tree), <span class="highlight">walk</span> (traverse chain for a path), <span class="highlight">update</span> (post-edit pass), <span class="highlight">audit</span> (exhaustive chain verification), <span class="highlight">gap</span> (file CX-NNN), <span class="highlight">resolve</span> (close CX-NNN), <span class="highlight">grow</span> (create child when new boundary emerges), <span class="highlight">cross-cut</span> (create cross-cutting contract).</p>
+          <p>Hard rules baked into the skill: always read root first, walk before edit, gap findings go to CONTRACTX/gaps/ not inline, update parent index when child changes, no child weakens parent, audit is exhaustive. <span class="highlight">The skill IS the protocol.</span></p>
+        </div>
+
+        <div class="concept">
+          <h3>Cross-cutting contracts</h3>
+          <p>Some contracts span multiple directories. HMAC auth touches both <code>lib/auth.py</code> and <code>web-ui/main_server.py</code>. The ClientRPC envelope touches <code>lib/dispatch_http.py</code> and <code>lib/client_rpc.py</code>. These go in <code>CONTRACTX/cross-cutting/</code> and are referenced from each affected directory's CONTRACTX.md.</p>
+          <p><span class="highlight">One contract, many references.</span> When the HMAC version bumps, update one file, and every directory CONTRACTX.md that links to it stays current.</p>
+        </div>
+
+      </div>
+
+      <div class="docs-sub">
+        <div class="docs-sub-label">FAQ</div>
+      </div>
+      <div class="faq">
+
+        <details>
+          <summary>How is this different from regular docs?</summary>
+          <div class="faq-body">
+            <p>Regular docs are written once and rot. CONTRACTX is <span class="highlight">maintained by the agent during every edit.</span> The post-edit pass keeps contracts current. The walk-before-edit protocol means the agent actually reads them. And the word "contract" triggers more careful AI behavior than "documentation."</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>What do I need to run this?</summary>
+          <div class="faq-body">
+            <p>Git and any AI agent that supports markdown instruction files (Claude Code, Codex, OpenCode, Cursor). That's it. No npm, no Python, no Docker. Clone the starter, run your agent, ask it to interview you.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Can I use this with an existing project?</summary>
+          <div class="faq-body">
+            <p>Yes. That's the primary use case. Clone contractx-starter into your existing repo, run <code>/contractx init</code>, and answer the interview questions. The agent builds the CONTRACTX tree from your existing code structure and conventions.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Does CONTRACTX replace my existing contract docs?</summary>
+          <div class="faq-body">
+            <p>No. CONTRACTX is <span class="highlight">code-level</span> contracts (per-directory rules for agents editing code). Domain-level contracts (AUDIT_CONTRACT, CASCADE_CONTRACT, etc.) stay where they are. The two systems complement each other &mdash; CONTRACTX gaps can escalate to domain-level gaps when they reveal design contradictions.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>What if my project has 200 directories?</summary>
+          <div class="faq-body">
+            <p>CONTRACTX only creates child files at <span class="highlight">durable boundaries</span> &mdash; directories with their own purpose, rules, and responsibilities. Most directories are simple containers and don't get a CONTRACTX.md. A 200-directory project might have 10-15 CONTRACTX.md files. The threshold is built into the skill.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>Can the agent really maintain this automatically?</summary>
+          <div class="faq-body">
+            <p>Yes &mdash; if you enforce the protocol. The contractx skill bakes in the rules: walk before edit, update after edit, never weaken parent rules. The audit workflow verifies compliance. After 2-3 sessions of enforcing it, the agent internalizes the pattern. <span class="highlight">The skill IS the enforcement.</span></p>
+          </div>
+        </details>
+
+        <details>
+          <summary>What happens if the agent ignores the contracts?</summary>
+          <div class="faq-body">
+            <p>Run <code>/contractx audit</code>. It detects drift: stale indexes, missing children, rules the agent violated, invariants that changed without updating the contract. Every finding becomes a CX-NNN gap with a fix path. <span class="highlight">The audit is your safety net.</span></p>
+          </div>
+        </details>
+
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about">
+      <div class="section-label" style="color: var(--neon-purple);">About</div>
+      <h2>Who built this</h2>
+      <div class="about-card">
+        <div>
+          <h3>Gad</h3>
+          <div class="role">Backend/Systems engineer</div>
+          <p>Built CONTRACTX after watching AI agents bullshit their way through 50+ design plans. Tired of "I assumed X" and "the docs were stale" &mdash; so I made a system where the agent reads binding contracts before every edit, and maintains them as it works.</p>
+          <p class="about-source">Built with <code>Claude Code</code> on the agent-platform</p>
+        </div>
+        <div class="about-meta">
+          contracts enforced: 18+<br>
+          gaps tracked: 200+<br>
+          system version: v0.1.0
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <div class="wrap">
+      <a href="https://github.com/GadOfir/contractx-starter">GitHub</a> &middot;
+      MIT &middot;
+      Built with <a href="https://claude.ai/code">Claude Code</a>
+    </div>
+  </footer>
+
+
+</body>
+</html>
+
