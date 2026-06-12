@@ -877,6 +877,7 @@
     <header class="hero">
       <h1><span class="los">CONTRACTX</span><br>Scare your agent.</h1>
       <p class="hero-sub">We're dealing with <strong>CONTRACTX</strong>, not docs. Your AI agent reads these contracts before touching any file &mdash; and thinks twice before bullshitting you. Self-growing. Self-auditing. <strong>Lawyer in the room.</strong></p>
+      <p class="hero-sub" style="font-size: 1rem; color: var(--neon-green); margin-top: 0.5rem;">A successful experiment in <strong>Adversarial Alignment</strong> that went well and I want to share.</p>
       <div class="terminal">
         <span class="prompt">$</span> <span class="cmd">git clone</span> <span class="arg">contractx-starter</span> <span class="cmt"># your agent's lawyer</span><br>
         <span class="prompt">$</span> <span class="cmd">cd</span> <span class="arg">your-project</span> <span class="cmd">&&</span> <span class="arg">claude</span><br>
@@ -944,25 +945,48 @@
     <section>
       <div class="section-label" style="color: var(--neon-blue);">Structure</div>
       <h2>What's in the folder</h2>
-      <div class="tree">
-        <span class="pr">CONTRACTX.md</span>              <span class="c">&larr; framework rail: rules + top-level index</span><br>
-        <span class="b">CONTRACTX/</span>                 <span class="c">&larr; root artifacts folder</span><br>
-        &nbsp;&nbsp;<span class="pr">_index.md</span>            <span class="c">&larr; artifact registry</span><br>
-        &nbsp;&nbsp;<span class="b">gaps/</span>                  <span class="c">&larr; open + resolved CX-NNN gap files</span><br>
-        &nbsp;&nbsp;<span class="b">audits/</span>                <span class="c">&larr; periodic chain audit reports</span><br>
-        &nbsp;&nbsp;<span class="b">cross-cutting/</span>         <span class="c">&larr; contracts spanning 2+ directories</span><br>
-        &nbsp;&nbsp;<span class="b">refs/</span>                  <span class="c">&larr; gap format, audit checklist, thresholds</span><br>
-        <span class="b">lib/</span>                        <span class="c">&larr; example child</span><br>
-        &nbsp;&nbsp;<span class="pr">CONTRACTX.md</span>          <span class="c">&larr; lib-level contract</span><br>
-        &nbsp;&nbsp;<span class="b">CONTRACTX/</span>             <span class="c">&larr; sub-contracts (dispatch, auth, policy...)</span><br>
-        &nbsp;&nbsp;<span class="b">handlers/</span><br>
-        &nbsp;&nbsp;&nbsp;&nbsp;<span class="pr">CONTRACTX.md</span>      <span class="c">&larr; handler-level contract</span><br>
-        &nbsp;&nbsp;&nbsp;&nbsp;<span class="b">CONTRACTX/</span>         <span class="c">&larr; sub-contracts (core, service, policy...)</span><br>
-        &nbsp;&nbsp;<span class="b">operators/</span><br>
-        &nbsp;&nbsp;&nbsp;&nbsp;<span class="pr">CONTRACTX.md</span>      <span class="c">&larr; single file (only 2 files, 1 concern)</span><br>
-        <span class="b">.claude/skills/</span><br>
-        &nbsp;&nbsp;<span class="b">contractx/</span><br>
-        &nbsp;&nbsp;&nbsp;&nbsp;<span class="pr">SKILL.md</span>            <span class="c">&larr; init, walk, update, audit, gap, grow</span>
+      <p class="desc">Two flavors. Same protocol. Pick what fits your project.</p>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+        <div>
+          <div style="font-family: var(--mono); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--neon-green); margin-bottom: 0.8rem;">Lean — small projects</div>
+          <div class="tree" style="padding: 1.2rem 1.5rem; font-size: 0.85rem; line-height: 2;">
+            <span class="g">CONTRACTX.md</span>          <span class="c">rules + index</span><br>
+            <span class="b">src/</span><br>
+            &nbsp;&nbsp;<span class="g">CONTRACTX.md</span>      <span class="c">one file, all rules</span><br>
+            <span class="b">tests/</span><br>
+            &nbsp;&nbsp;<span class="g">CONTRACTX.md</span>      <span class="c">test conventions</span><br>
+            <span class="b">.claude/skills/</span><br>
+            &nbsp;&nbsp;<span class="b">contractx/</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="a">SKILL.md</span>        <span class="c">the engine</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-family: var(--mono); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--neon-purple); margin-bottom: 0.8rem;">Complex — large codebases</div>
+          <div class="tree" style="padding: 1.2rem 1.5rem; font-size: 0.85rem; line-height: 2;">
+            <span class="g">CONTRACTX.md</span>          <span class="c">framework rail</span><br>
+            <span class="b">CONTRACTX/</span><br>
+            &nbsp;&nbsp;<span class="cy">gaps/</span>              <span class="c">CX-NNN tracking</span><br>
+            &nbsp;&nbsp;<span class="cy">cross-cutting/</span>     <span class="c">multi-dir contracts</span><br>
+            <span class="b">lib/</span><br>
+            &nbsp;&nbsp;<span class="g">CONTRACTX.md</span>      <span class="c">entry point</span><br>
+            &nbsp;&nbsp;<span class="b">CONTRACTX/</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="pr">dispatch.md</span>   <span class="c">sub-contracts</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="pr">auth.md</span><br>
+            &nbsp;&nbsp;<span class="b">handlers/</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="g">CONTRACTX.md</span>  <span class="c">one file or folder</span><br>
+            &nbsp;&nbsp;<span class="b">operators/</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="g">CONTRACTX.md</span>  <span class="c">single file (tiny)</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.6rem; flex-wrap: wrap; font-family: var(--mono); font-size: 0.78rem;">
+        <span><span class="g" style="display: inline; font-weight: 700; color: var(--neon-green);">■</span> CONTRACTX.md = single-file contract</span>
+        <span><span class="b" style="display: inline; font-weight: 700; color: var(--neon-blue);">■</span> CONTRACTX/ dir = split contracts</span>
+        <span><span class="pr" style="display: inline; font-weight: 700; color: var(--neon-purple);">■</span> sub-contract .md</span>
+        <span><span class="cy" style="display: inline; font-weight: 700; color: var(--neon-cyan);">■</span> artifact folder</span>
+        <span><span class="a" style="display: inline; font-weight: 700; color: var(--neon-amber);">■</span> SKILL.md = agent skill</span>
       </div>
     </section>
 
@@ -1185,6 +1209,35 @@
     </div>
   </footer>
 
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'light' ? 'dark' : (current === 'dark' ? 'light' :
+        (window.matchMedia('(prefers-color-scheme: light)').matches ? 'dark' : 'light'));
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('contractx-theme', next);
+      updateIcon(next);
+    }
+
+    function updateIcon(theme) {
+      const icon = document.querySelector('.theme-icon');
+      if (icon) icon.innerHTML = theme === 'light' ? '&#9789;' : '&#9788;';
+    }
+
+    (function() {
+      const saved = localStorage.getItem('contractx-theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved) {
+        document.documentElement.setAttribute('data-theme', saved);
+        updateIcon(saved);
+      } else if (prefersDark) {
+        updateIcon('dark');
+      } else {
+        updateIcon('light');
+      }
+    })();
+  </script>
 
 </body>
 </html>
